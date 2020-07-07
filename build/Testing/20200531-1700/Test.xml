@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Site BuildName="Win32-mingw32-make"
+	BuildStamp="20200531-1700-Experimental"
+	Name="DESKTOP-3BI66OM"
+	Generator="ctest-3.17.2"
+	CompilerName="C:/Program Files/mingw-w64/x86_64-8.1.0-win32-seh-rt_v6-rev0/mingw64/bin/x86_64-w64-mingw32-g++.exe"
+	CompilerVersion="8.1.0"
+	OSName="Windows"
+	Hostname="DESKTOP-3BI66OM"
+	OSRelease=" Professional"
+	OSVersion=" (Build 18363)"
+	OSPlatform="AMD64"
+	Is64Bits="1"
+	VendorString="AuthenticAMD"
+	VendorID="Advanced Micro Devices"
+	FamilyID="15"
+	ModelID="2"
+	ProcessorCacheSize="80"
+	NumberOfLogicalCPU="8"
+	NumberOfPhysicalCPU="4"
+	TotalVirtualMemory="17078"
+	TotalPhysicalMemory="8137"
+	LogicalProcessorsPerPhysical="2"
+	ProcessorClockFrequency="4000"
+	>
+	<Testing>
+		<StartDateTime>May 31 13:00 Eastern Daylight Time</StartDateTime>
+		<StartTestTime>1590944406</StartTestTime>
+		<TestList/>
+		<EndDateTime>May 31 13:00 Eastern Daylight Time</EndDateTime>
+		<EndTestTime>1590944406</EndTestTime>
+		<ElapsedMinutes>0</ElapsedMinutes>
+	</Testing>
+</Site>

@@ -1,0 +1,13 @@
+{
+    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
+    "files.associations": {
+        "iostream": "cpp",
+        "string": "cpp",
+        "ostream": "cpp",
+        "fstream": "cpp",
+        "sstream": "cpp",
+        "chrono": "cpp",
+        "algorithm": "cpp",
+        "vector": "cpp"
+    }
+}

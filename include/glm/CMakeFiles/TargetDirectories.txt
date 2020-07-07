@@ -1,0 +1,2 @@
+C:/Users/hdvie/Documents/programming/cpp/test/include/glm/CMakeFiles/edit_cache.dir
+C:/Users/hdvie/Documents/programming/cpp/test/include/glm/CMakeFiles/rebuild_cache.dir

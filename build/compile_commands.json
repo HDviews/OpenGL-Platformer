@@ -1,0 +1,17 @@
+[
+{
+  "directory": "C:/Users/hdvie/Documents/programming/cpp/test/build",
+  "command": "C:\\PROGRA~1\\MINGW-~1\\X86_64~1.0-W\\mingw64\\bin\\X86_64~2.EXE   @CMakeFiles/main.dir/includes_CXX.rsp -g   -o CMakeFiles\\main.dir\\main.cpp.obj -c C:\\Users\\hdvie\\Documents\\programming\\cpp\\test\\main.cpp",
+  "file": "C:/Users/hdvie/Documents/programming/cpp/test/main.cpp"
+},
+{
+  "directory": "C:/Users/hdvie/Documents/programming/cpp/test/build",
+  "command": "C:\\PROGRA~1\\MINGW-~1\\X86_64~1.0-W\\mingw64\\bin\\X86_64~2.EXE   @CMakeFiles/main.dir/includes_CXX.rsp -g   -o CMakeFiles\\main.dir\\stb_image.cpp.obj -c C:\\Users\\hdvie\\Documents\\programming\\cpp\\test\\stb_image.cpp",
+  "file": "C:/Users/hdvie/Documents/programming/cpp/test/stb_image.cpp"
+},
+{
+  "directory": "C:/Users/hdvie/Documents/programming/cpp/test/build",
+  "command": "C:\\PROGRA~1\\MINGW-~1\\X86_64~1.0-W\\mingw64\\bin\\X8EAA8~1.EXE  @CMakeFiles/main.dir/includes_C.rsp -g   -o CMakeFiles\\main.dir\\include\\glad.c.obj   -c C:\\Users\\hdvie\\Documents\\programming\\cpp\\test\\include\\glad.c",
+  "file": "C:/Users/hdvie/Documents/programming/cpp/test/include/glad.c"
+}
+]
