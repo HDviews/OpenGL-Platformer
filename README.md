@@ -1,5 +1,5 @@
 # OpenGL-Platformer
-OpenGL platformer with box2D as a physics engine
+OpenGL platformer with custom made physics engine
 
 this projects goal is to show the following Graphics topics in pixel art form
 
