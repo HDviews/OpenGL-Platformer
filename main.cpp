@@ -301,13 +301,11 @@ unsigned int LoadShaders(const char * vertexFilePath, const char * fragmentFileP
 int main() {
     if (!glfwInit())
         return -1;
-
+    
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // To make MacOS happy; should not be needed
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
     
     window = glfwCreateWindow(SCREEN_HEIGHT, SCREEN_WIDTH, "Hello World", NULL, NULL);
@@ -331,7 +329,6 @@ int main() {
 
     GLuint ProjectionID = glGetUniformLocation(ProgramID, "proj");
     GLuint ViewID = glGetUniformLocation(ProgramID, "view");
-    //GLuint ScalarID = glGetUniformLocation(ProgramID, "scalar");
 
     proj = glm::ortho<float>(0.0f, SCREEN_WIDTH, 0.0f, SCREEN_HEIGHT, -10.0f, 10.0f);
     view = glm::lookAt(
@@ -362,9 +359,7 @@ int main() {
     }
 
     square.destroy();
-
 	glDeleteProgram(ProgramID);
-
     glfwTerminate();
     return 0;
 }
