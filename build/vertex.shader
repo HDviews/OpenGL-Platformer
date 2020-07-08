@@ -15,7 +15,7 @@ layout (location = 3) uniform mat4 model;
 
 void main()
 {
-    gl_Position = proj * view * scalar * model * vec4(aPos, 1.0);
+    gl_Position = proj * view * model * vec4(aPos, 1.0);
     ourColor = aColor; // set ourColor to the input color we got from the vertex data
     TexCoord = aTexCoord;
 }       

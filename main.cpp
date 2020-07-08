@@ -19,22 +19,25 @@ using namespace glm;
 
 GLFWwindow* window;
 
+//constants
 const int SCREEN_HEIGHT = 640;
 const int SCREEN_WIDTH = 480;
 const float SPEED = 3.0f;
 const float MOUSESPEED = 0.005f;
+
+//matrices
 glm::mat4 proj;
 glm::mat4 view;
-glm::mat4 model;
-glm::mat4 scalar = glm::scale(glm::mat4(1.0f), glm::vec3(200.0f, 200.0f, 0.0f));
 glm::vec3 up = glm::vec3(0, 1, 0);
 
 // position
 glm::vec3 position = glm::vec3( 0, 0, 5);
 glm::vec3 lookat_position = glm::vec3( 0, 0, -1);
-glm::vec3 x_position = glm::vec3( 10, 0, 0 );
-glm::vec3 y_position = glm::vec3( 0, 10, 0 );
-glm::vec3 z_position = glm::vec3( 0, 0, 10 );
+
+//player movement speed pixels
+glm::vec3 x_position = glm::vec3( 20, 0, 0 );
+glm::vec3 y_position = glm::vec3( 0, 20, 0 );
+glm::vec3 z_position = glm::vec3( 0, 0, 20 );
 
 struct player {
  
@@ -46,7 +49,7 @@ int width, height, nrChannels;
 glm::mat4 model = glm::mat4(1.0f);
 GLubyte *data;
 glm::vec3 position = glm::vec3(0.1f, 0.1f, 0.0f);
-GLfloat container[];
+GLfloat container[7];
 
 //glfwGetTime is called only once, the first time this function is called
 const double lastTime = glfwGetTime();
@@ -56,14 +59,19 @@ double currentTime = glfwGetTime();
 float deltaTime = float(currentTime - lastTime);
 
 
-void init(glm::vec3 color, const char * texture_path) {
+void init(glm::vec3 color, const char * texture_path, glm::vec2 pos, glm::vec2 size) {
+
+    container[0] = {pos.x};          container[1] = {pos.y};          //top left
+    container[2] = {pos.x + size.x}; container[3] = {pos.y};          //top right
+    container[4] = {pos.x + size.x}; container[5] = {pos.y + size.y}; //bottom right
+    container[6] = {pos.x};          container[7] = {pos.y + size.y}; //bottom left
 
     GLfloat vertices[] = {
-        //vertex positions  colors                      texture coords
-        -1.0f, -1.0f, 0.0f, color.x, color.y, color.z,  0.0f,  0.0f,
-         1.0f, -1.0f, 0.0f, color.x, color.y, color.z,  1.0f,  0.0f,
-         1.0f,  1.0f, 0.0f, color.x, color.y, color.z,  1.0f,  1.0f, 
-        -1.0f,  1.0f, 0.0f, color.x, color.y, color.z,  0.0f,  1.0f
+        //vertex positions                 colors                      texture coords
+         container[0], container[1], 0.0f, color.x, color.y, color.z,  0.0f,  0.0f,
+         container[2], container[3], 0.0f, color.x, color.y, color.z,  1.0f,  0.0f,
+         container[4], container[5], 0.0f, color.x, color.y, color.z,  1.0f,  1.0f, 
+         container[6], container[7], 0.0f, color.x, color.y, color.z,  0.0f,  1.0f
     };
 
     GLuint indices[] = {
@@ -124,6 +132,7 @@ void move(int key_up, int key_down, int key_left, int key_right) {
         model = glm::translate(model, glm::vec3( deltaTime + position.x, 0, 0));
     }
 }
+
 void draw() {
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -152,7 +161,6 @@ void destroy() {
     glDeleteBuffers(1, &EBO);
 }
 
-GLfloat calculateVertices();
 };
 
 mat4 GetProjectionMatrix() {
@@ -164,7 +172,6 @@ mat4 GetViewMatrix() {
 }
 
 void computeMatricesFromInputs() {
-
     //glfwGetTime is called only once, the first time this function is called
     static double lastTime = glfwGetTime();
 
@@ -174,8 +181,6 @@ void computeMatricesFromInputs() {
 
     double xpos, ypos;
     glfwGetCursorPos(window, &xpos, &ypos);
-
-
 
     if (glfwGetKey(window,  GLFW_KEY_UP) == GLFW_PRESS) {
         position -= y_position * deltaTime * SPEED;
@@ -294,7 +299,6 @@ unsigned int LoadShaders(const char * vertexFilePath, const char * fragmentFileP
 }
 
 int main() {
-
     if (!glfwInit())
         return -1;
 
@@ -320,15 +324,14 @@ int main() {
         return -1;
     
     player square;
-    square.init(glm::vec3(1.0f), "vesentry2.png" );
+    square.init(glm::vec3(1.0f), "vesentry2.png", glm::vec2(128.0f, 480.0f), glm::vec2(128.0f));
     
     GLuint ProgramID = LoadShaders("vertex.shader", "fragment.shader");
     glClearColor(0.2, 0.3, 0.4, 1.0);
 
     GLuint ProjectionID = glGetUniformLocation(ProgramID, "proj");
     GLuint ViewID = glGetUniformLocation(ProgramID, "view");
-    GLuint ScalarID = glGetUniformLocation(ProgramID, "scalar");
-    GLuint MatrixID = glGetUniformLocation(ProgramID, "MVP");
+    //GLuint ScalarID = glGetUniformLocation(ProgramID, "scalar");
 
     proj = glm::ortho<float>(0.0f, SCREEN_WIDTH, 0.0f, SCREEN_HEIGHT, -10.0f, 10.0f);
     view = glm::lookAt(
@@ -336,7 +339,6 @@ int main() {
         glm::vec3(0,0,0), // and looks at the origin
         glm::vec3(0,1,0)  // Head is up (set to 0,-1,0 to look upside-down)   
     );
-    model = glm::mat4(1.0f);
     
     while(!glfwWindowShouldClose(window)) {
         glClear(GL_COLOR_BUFFER_BIT);
@@ -349,7 +351,6 @@ int main() {
 
         glUniformMatrix4fv(0, 1, GL_FALSE, &proj[0][0]);
         glUniformMatrix4fv(1, 1, GL_FALSE, &view[0][0]);
-        glUniformMatrix4fv(2, 1, GL_FALSE, &scalar[0][0]);
 
         square.draw();
         square.move(GLFW_KEY_W, GLFW_KEY_S, GLFW_KEY_A, GLFW_KEY_D);
@@ -362,12 +363,8 @@ int main() {
 
     square.destroy();
 
-    /*
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
-    glDeleteBuffers(1, &EBO);
 	glDeleteProgram(ProgramID);
-    */
+
     glfwTerminate();
     return 0;
 }
