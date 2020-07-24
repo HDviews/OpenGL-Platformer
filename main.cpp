@@ -22,7 +22,7 @@ GLFWwindow* window;
 //constants
 const int SCREEN_HEIGHT = 640;
 const int SCREEN_WIDTH = 480;
-const float SPEED = 3.0f;
+const float SPEED = 2.0f;
 const float MOUSESPEED = 0.005f;
 
 //matrices
@@ -129,47 +129,47 @@ void init(glm::vec3 color, const char * texture_path, glm::vec2 player_pos, glm:
 void move(int key_up, int key_down, int key_left, int key_right) {
     
     if (glfwGetKey(window,  key_up) == GLFW_PRESS) {
-        model = glm::translate(model, glm::vec3(0, 1 + (deltaTime + SPEED), 0));
-        this->pos.y += (deltaTime + SPEED) + 1;
+        model = glm::translate(model, glm::vec3(0, SPEED + (deltaTime), 0));
+        this->pos.y += (deltaTime) + SPEED;
         cout << "position x: " << this->pos.x << " | " << "position y: " << this->pos.y << endl;
     }
 
     if (glfwGetKey(window, key_down) == GLFW_PRESS) {
-        model = glm::translate(model, glm::vec3(0, (deltaTime - SPEED) - 1, 0));
-        this->pos.y += (deltaTime - SPEED) - 1;
+        model = glm::translate(model, glm::vec3(0, (deltaTime) - SPEED, 0));
+        this->pos.y += (deltaTime) - SPEED;
         cout << "position x: " << this->pos.x << " | " << "position y: " << this->pos.y << endl;
     }
 
     if (glfwGetKey(window,  key_left) == GLFW_PRESS) {
-        model = glm::translate(model, glm::vec3( (deltaTime - SPEED) - 1 , 0, 0));
-        this->pos.x -= 1 - (deltaTime - SPEED);
+        model = glm::translate(model, glm::vec3( (deltaTime) - SPEED, 0, 0));
+        this->pos.x -= SPEED - (deltaTime);
         cout << "position x: " << this->pos.x << " | " << "position y: " << this->pos.y << endl;
     }
 
     if (glfwGetKey(window,  key_right) == GLFW_PRESS) {
-        model = glm::translate(model, glm::vec3( (deltaTime + SPEED) + 1, 0, 0));
-        this->pos.x += (deltaTime + SPEED) + 1;
+        model = glm::translate(model, glm::vec3( SPEED + (deltaTime), 0, 0));
+        this->pos.x += SPEED + (deltaTime);
         cout << "position x: " << this->pos.x << " | " << "position y: " << this->pos.y << endl;
     }
 
-    if (this->pos.x + this->size.x >= SCREEN_WIDTH) { // right face
-        this->pos.x -= 1;
-        model = glm::translate(model, glm::vec3( -1 , 0, 0));
+    if (this->pos.x + this->size.x >= SCREEN_WIDTH + 2) { // right face
+        this->pos.x -= SPEED + (deltaTime);
+        model = glm::translate(model, glm::vec3( -SPEED + (deltaTime) , 0, 0));
+    } 
+
+    if (this->pos.x <= -2) { // left face
+        this->pos.x += SPEED + (deltaTime);
+        model = glm::translate(model, glm::vec3( SPEED + (deltaTime), 0, 0));
     }
 
-    if (this->pos.x <= 0) { // left face
-        this->pos.x += 1;
-        model = glm::translate(model, glm::vec3( 1 , 0, 0));
+    if (this->pos.y + this->size.y >= SCREEN_HEIGHT) { //top face
+        this->pos.y -= SPEED + (deltaTime);
+        model = glm::translate(model, glm::vec3( 0 , -SPEED + (deltaTime), 0));
     }
 
-    if (this->pos.y + this->size.y >= SCREEN_HEIGHT) { 
-        this->pos.y -= 1;
-        model = glm::translate(model, glm::vec3( 0 , -1, 0));
-    }
-
-    if (this->pos.y <= 0) {
-        this->pos.y += 1;
-        model = glm::translate(model, glm::vec3( 0 , 1, 0));
+    if (this->pos.y <= -2) { //bottom face
+        this->pos.y += SPEED + (deltaTime);
+        model = glm::translate(model, glm::vec3( 0 , SPEED + (deltaTime), 0));
     }   
 }
 
