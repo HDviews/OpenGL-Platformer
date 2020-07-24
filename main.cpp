@@ -39,8 +39,9 @@ glm::vec3 x_position = glm::vec3( 20, 0, 0 );
 glm::vec3 y_position = glm::vec3( 0, 20, 0 );
 glm::vec3 z_position = glm::vec3( 0, 0, 20 );
 
-struct player {
- 
+class player {
+public:
+
 glm::vec2 pos, size;
 glm::vec3 color;
 const char * texture_path;
@@ -51,6 +52,8 @@ GLubyte *data;
 glm::vec3 position = glm::vec3(0.1f, 0.1f, 0.0f);
 GLfloat container[7];
 
+glm::vec2 lastPos = pos;
+
 //glfwGetTime is called only once, the first time this function is called
 const double lastTime = glfwGetTime();
 
@@ -58,8 +61,13 @@ const double lastTime = glfwGetTime();
 double currentTime = glfwGetTime();
 float deltaTime = float(currentTime - lastTime);
 
-
-void init(glm::vec3 color, const char * texture_path, glm::vec2 pos, glm::vec2 size) {
+void init(glm::vec3 color, const char * texture_path, glm::vec2 player_pos, glm::vec2 player_size) {
+    this->pos = player_pos;
+    this->size = player_size;
+    cout << pos.x << endl;
+    cout << pos.y << endl;
+    cout << size.x << endl;
+    cout << size.y << endl;
 
     container[0] = {pos.x};          container[1] = {pos.y};          //top left
     container[2] = {pos.x + size.x}; container[3] = {pos.y};          //top right
@@ -79,19 +87,19 @@ void init(glm::vec3 color, const char * texture_path, glm::vec2 pos, glm::vec2 s
         2, 3, 0
     };
 
-    glGenVertexArrays(1, &VAO);
-    glBindVertexArray(VAO);
+    glGenVertexArrays(1, &this->VAO);
+    glBindVertexArray(this->VAO);
 
-    glGenBuffers(1, &VBO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glGenBuffers(1, &this->VBO);
+    glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
 
-    glGenBuffers(1, &EBO);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glGenBuffers(1, &this->EBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-    glGenTextures(1, &texture);
-    glBindBuffer(GL_TEXTURE_2D, texture);
+    glGenTextures(1, &this->texture);
+    glBindBuffer(GL_TEXTURE_2D, this->texture);
 
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
@@ -99,9 +107,13 @@ void init(glm::vec3 color, const char * texture_path, glm::vec2 pos, glm::vec2 s
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+   
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, this->width, this->height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+    glGenerateMipmap(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, texture);
 
     stbi_set_flip_vertically_on_load(true); 
-    data = stbi_load(texture_path, &width, &height, &nrChannels, 0);
+    data = stbi_load(texture_path, &this->width, &this->height, &this->nrChannels, 0);
     if (data) {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
@@ -115,50 +127,85 @@ void init(glm::vec3 color, const char * texture_path, glm::vec2 pos, glm::vec2 s
 };
 
 void move(int key_up, int key_down, int key_left, int key_right) {
-
+    
     if (glfwGetKey(window,  key_up) == GLFW_PRESS) {
-        model = glm::translate(model, glm::vec3(0,  deltaTime + position.y, 0));
+        model = glm::translate(model, glm::vec3(0, 1 + (deltaTime + SPEED), 0));
+        this->pos.y += (deltaTime + SPEED) + 1;
+        cout << "position x: " << this->pos.x << " | " << "position y: " << this->pos.y << endl;
     }
 
     if (glfwGetKey(window, key_down) == GLFW_PRESS) {
-        model = glm::translate(model, glm::vec3(0, deltaTime - position.y, 0));
+        model = glm::translate(model, glm::vec3(0, (deltaTime - SPEED) - 1, 0));
+        this->pos.y += (deltaTime - SPEED) - 1;
+        cout << "position x: " << this->pos.x << " | " << "position y: " << this->pos.y << endl;
     }
 
     if (glfwGetKey(window,  key_left) == GLFW_PRESS) {
-        model = glm::translate(model, glm::vec3( deltaTime - position.x, 0, 0));
+        model = glm::translate(model, glm::vec3( (deltaTime - SPEED) - 1 , 0, 0));
+        this->pos.x -= 1 - (deltaTime - SPEED);
+        cout << "position x: " << this->pos.x << " | " << "position y: " << this->pos.y << endl;
     }
 
     if (glfwGetKey(window,  key_right) == GLFW_PRESS) {
-        model = glm::translate(model, glm::vec3( deltaTime + position.x, 0, 0));
+        model = glm::translate(model, glm::vec3( (deltaTime + SPEED) + 1, 0, 0));
+        this->pos.x += (deltaTime + SPEED) + 1;
+        cout << "position x: " << this->pos.x << " | " << "position y: " << this->pos.y << endl;
     }
+
+    if (this->pos.x + this->size.x >= SCREEN_WIDTH) { // right face
+        this->pos.x -= 1;
+        model = glm::translate(model, glm::vec3( -1 , 0, 0));
+    }
+
+    if (this->pos.x <= 0) { // left face
+        this->pos.x += 1;
+        model = glm::translate(model, glm::vec3( 1 , 0, 0));
+    }
+
+    if (this->pos.y + this->size.y >= SCREEN_HEIGHT) { 
+        this->pos.y -= 1;
+        model = glm::translate(model, glm::vec3( 0 , -1, 0));
+    }
+
+    if (this->pos.y <= 0) {
+        this->pos.y += 1;
+        model = glm::translate(model, glm::vec3( 0 , 1, 0));
+    }   
 }
 
 void draw() {
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBindVertexArray(VAO);
+    glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->EBO);
+    glBindVertexArray(this->VAO);
     // set the texture wrapping parameters 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);	// set texture wrapping to GL_REPEAT (default wrapping method)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
     // set texture filtering parameters
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);    
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-    glGenerateMipmap(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, texture);
-
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); 
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 };
 
 void update() {
-    glUniformMatrix4fv(3, 1, GL_FALSE, &model[0][0]);
+    //cout << "Player Position: " << this->pos.x << ", " << this->pos.y << endl;
+    //cout << "CurrentTime: " << getDeltaTime() << endl;
+    glUniformMatrix4fv(3, 1, GL_FALSE, &this->model[0][0]);
 };
 
 void destroy() {
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
     glDeleteBuffers(1, &EBO);
+}
+
+float getDeltaTime() {
+    const double lastTime = glfwGetTime();
+
+    //Compute time difference between current and last frame
+    currentTime = glfwGetTime();
+    deltaTime = float(currentTime - lastTime);
+
+    return deltaTime;
 }
 
 };
@@ -205,6 +252,10 @@ void computeMatricesFromInputs() {
     );
 
     lastTime = currentTime;
+}
+
+static void cursor_position_callback(GLFWwindow* window, double xpos, double ypos) {
+    cout << "cposition x: " << xpos <<  " | " << "cposition y: " << ypos << endl;
 }
 
 unsigned int LoadShaders(const char * vertexFilePath, const char * fragmentFilePath) {
@@ -322,32 +373,27 @@ int main() {
         return -1;
     
     player square;
-    square.init(glm::vec3(1.0f), "vesentry2.png", glm::vec2(128.0f, 480.0f), glm::vec2(128.0f));
+    square.init(glm::vec3(1.0f), "vesentry2.png", glm::vec2(32.0f, 480.0f), glm::vec2(128.0f));
     
     GLuint ProgramID = LoadShaders("vertex.shader", "fragment.shader");
-    glClearColor(0.2, 0.3, 0.4, 1.0);
+    glClearColor(0.2f, 0.3f, 0.4f, 1.0f);
 
     GLuint ProjectionID = glGetUniformLocation(ProgramID, "proj");
-    GLuint ViewID = glGetUniformLocation(ProgramID, "view");
 
-    proj = glm::ortho<float>(0.0f, SCREEN_WIDTH, 0.0f, SCREEN_HEIGHT, -10.0f, 10.0f);
-    view = glm::lookAt(
-        glm::vec3(0,0,1), // Camera is at (4,3,3), in World Space
-        glm::vec3(0,0,0), // and looks at the origin
-        glm::vec3(0,1,0)  // Head is up (set to 0,-1,0 to look upside-down)   
-    );
+    proj = glm::ortho<float>(0.0f, SCREEN_WIDTH, 0.0f, SCREEN_HEIGHT, 0.0f, 1.0f);
     
     while(!glfwWindowShouldClose(window)) {
+
         glClear(GL_COLOR_BUFFER_BIT);
         glClear(GL_DEPTH_BUFFER_BIT);
         glUseProgram(ProgramID);
 
         computeMatricesFromInputs();
         proj = GetProjectionMatrix();
-        view = GetViewMatrix();
 
         glUniformMatrix4fv(0, 1, GL_FALSE, &proj[0][0]);
-        glUniformMatrix4fv(1, 1, GL_FALSE, &view[0][0]);
+
+        glfwSetCursorPosCallback(window, cursor_position_callback);
 
         square.draw();
         square.move(GLFW_KEY_W, GLFW_KEY_S, GLFW_KEY_A, GLFW_KEY_D);

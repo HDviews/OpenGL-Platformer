@@ -691,7 +691,7 @@
 				}
 			],
 			"type" : "PATH",
-			"value" : "C:/Program Files (x86)/window"
+			"value" : "C:/Program Files (x86)/main"
 		},
 		{
 			"name" : "CMAKE_LINKER",
@@ -1792,6 +1792,30 @@
 			],
 			"type" : "FILEPATH",
 			"value" : "SVNCOMMAND-NOTFOUND"
+		},
+		{
+			"name" : "main_BINARY_DIR",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "Value Computed by CMake"
+				}
+			],
+			"type" : "STATIC",
+			"value" : "C:/Users/hdvie/Documents/programming/cpp/test/build"
+		},
+		{
+			"name" : "main_SOURCE_DIR",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "Value Computed by CMake"
+				}
+			],
+			"type" : "STATIC",
+			"value" : "C:/Users/hdvie/Documents/programming/cpp/test"
 		},
 		{
 			"name" : "window_BINARY_DIR",

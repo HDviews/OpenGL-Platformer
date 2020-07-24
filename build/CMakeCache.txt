@@ -115,7 +115,7 @@ CMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE
 CMAKE_GNUtoMS:BOOL=OFF
 
 //Install path prefix, prepended onto install directories.
-CMAKE_INSTALL_PREFIX:PATH=C:/Program Files (x86)/window
+CMAKE_INSTALL_PREFIX:PATH=C:/Program Files (x86)/main
 
 //Path to a program.
 CMAKE_LINKER:FILEPATH=C:/Program Files/mingw-w64/x86_64-8.1.0-win32-seh-rt_v6-rev0/mingw64/bin/ld.exe
@@ -337,6 +337,12 @@ SLURM_SRUN_COMMAND:FILEPATH=SLURM_SRUN_COMMAND-NOTFOUND
 
 //Path to a program.
 SVNCOMMAND:FILEPATH=SVNCOMMAND-NOTFOUND
+
+//Value Computed by CMake
+main_BINARY_DIR:STATIC=C:/Users/hdvie/Documents/programming/cpp/test/build
+
+//Value Computed by CMake
+main_SOURCE_DIR:STATIC=C:/Users/hdvie/Documents/programming/cpp/test
 
 //Value Computed by CMake
 window_BINARY_DIR:STATIC=C:/Users/hdvie/Documents/programming/cpp/test/build
